@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Mensa LUM • Menù del Giorno</title>
+
+  <!-- PWA & Apple iOS Metadata -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#002B49">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Mensa LUM">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-180.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/icons/icon-180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192.png">
+  <link rel="icon" type="image/jpeg" href="./AppIcon.jpg">
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            lum: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#005a9c',
+              800: '#003366',
+              900: '#002B49',
+              950: '#00192e'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #00192e;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .safe-top {
+      padding-top: env(safe-area-inset-top, 0px);
+    }
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+  </style>
+</head>
+<body class="flex flex-col h-full w-full select-none text-white">
+
+  <!-- TOP HEADER BAR -->
+  <header class="safe-top bg-lum-900 border-b border-lum-800 shadow-md z-30 shrink-0">
+    <div class="flex items-center justify-between px-4 py-2.5">
+      <div class="flex items-center space-x-3">
+        <img src="./assets/icons/icon-180.png" alt="Mensa LUM" class="w-8 h-8 rounded-xl shadow border border-white/20">
+        <div>
+          <h1 class="text-sm font-bold tracking-tight text-white leading-tight">Mensa LUM</h1>
+          <p class="text-[10px] text-blue-200">Menù del Giorno • Gabriele Ponziano</p>
+        </div>
+      </div>
+      
+      <div class="flex items-center space-x-2">
+        <button id="refreshBtn" onclick="refreshFrame()" class="p-1.5 text-blue-200 hover:text-white hover:bg-white/10 rounded-lg transition" title="Aggiorna">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+        </button>
+        <a href="./install.html" class="px-2.5 py-1 text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition shadow flex items-center gap-1">
+          <span>📲 Installa</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WEBVIEW CONTAINER -->
+  <main class="flex-1 relative w-full h-full bg-white overflow-hidden">
+    <div id="loadingIndicator" class="absolute inset-0 flex flex-col items-center justify-center bg-slate-900 text-white z-10 transition-opacity duration-300">
+      <div class="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+      <p class="text-sm text-slate-300 font-medium">Caricamento menù mensa...</p>
+    </div>
+
+    <iframe 
+      id="mensaFrame" 
+      src="https://prodotti-tuccipiaci.imensa.it/#lum" 
+      class="w-full h-full border-0" 
+      onload="document.getElementById('loadingIndicator').classList.add('opacity-0', 'pointer-events-none')"
+      allow="fullscreen"
+    ></iframe>
+  </main>
+
+  <!-- FLOATING INSTALL BANNER FOR IPHONE SAFARI -->
+  <div id="iosInstallBanner" class="hidden fixed bottom-3 left-3 right-3 bg-lum-900/95 backdrop-blur-md border border-blue-500/40 text-white p-3.5 rounded-2xl shadow-2xl z-50 flex items-center justify-between safe-bottom animate-bounce-slow">
+    <div class="flex items-center space-x-3">
+      <img src="./assets/icons/icon-180.png" class="w-10 h-10 rounded-xl shrink-0 border border-white/20">
+      <div class="text-xs">
+        <p class="font-bold text-white">Installa come App su iPhone</p>
+        <p class="text-blue-200 text-[11px]">Tocca <strong class="text-white">Condividi (⎋)</strong> e poi <strong class="text-white">"Aggiungi a Home"</strong></p>
+      </div>
+    </div>
+    <button onclick="dismissBanner()" class="text-slate-400 hover:text-white p-1 text-lg leading-none font-bold">&times;</button>
+  </div>
+
+  <script>
+    function refreshFrame() {
+      const frame = document.getElementById('mensaFrame');
+      const loader = document.getElementById('loadingIndicator');
+      loader.classList.remove('opacity-0', 'pointer-events-none');
+      frame.src = "https://prodotti-tuccipiaci.imensa.it/#lum?t=" + new Date().getTime();
+    }
+
+    function dismissBanner() {
+      document.getElementById('iosInstallBanner').classList.add('hidden');
+      sessionStorage.setItem('bannerDismissed', 'true');
+    }
+
+    // Detect if running in mobile Safari and NOT already installed as standalone
+    const isIos = /iPhone|iPad|iPod/.test(navigator.userAgent);
+    const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+
+    if (isIos && !isStandalone && !sessionStorage.getItem('bannerDismissed')) {
+      document.getElementById('iosInstallBanner').classList.remove('hidden');
+    }
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(console.error);
+      });
+    }
+  </script>
+</body>
+</html>

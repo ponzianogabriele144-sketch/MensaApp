@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Installa Mensa LUM su iPhone</title>
+  
+  <link rel="apple-touch-icon" href="./assets/icons/icon-180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./assets/icons/icon-192.png">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      background-color: #00192e;
+      color: #f8fafc;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6">
+  <div class="max-w-md w-full bg-slate-900 border border-blue-900/60 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+    
+    <!-- Header -->
+    <div class="flex items-center gap-4 border-b border-slate-800 pb-5">
+      <img src="./assets/icons/icon-180.png" alt="Mensa LUM" class="w-16 h-16 rounded-2xl shadow-lg border border-white/20" />
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-2xl font-black tracking-tight text-white">Mensa <span class="text-blue-400">LUM</span></h1>
+          <span class="px-2 py-0.5 text-[10px] font-bold rounded-md bg-blue-600 text-white">iOS APP</span>
+        </div>
+        <p class="text-xs text-slate-400 mt-1">Sviluppata da <strong>Gabriele Ponziano</strong></p>
+      </div>
+    </div>
+
+    <!-- QR Code Box -->
+    <div class="flex flex-col sm:flex-row items-center gap-5 p-5 rounded-2xl bg-slate-950 border border-slate-800 text-center sm:text-left">
+      <div id="qrcode" class="p-3 bg-white rounded-2xl shadow-md shrink-0 flex items-center justify-center min-w-[140px] min-h-[140px]"></div>
+      
+      <div class="space-y-2">
+        <span class="inline-block px-2.5 py-1 text-[11px] font-bold rounded-full bg-blue-950 text-blue-300 border border-blue-800">
+          Scansiona con iPhone
+        </span>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          Inquadra il codice QR con la fotocamera del tuo iPhone per aprire l'app su Safari.
+        </p>
+      </div>
+    </div>
+
+    <!-- Guida Installazione -->
+    <div class="space-y-3 bg-slate-800/60 rounded-2xl p-4 border border-slate-700/60 text-xs">
+      <h3 class="font-bold text-white text-sm flex items-center gap-2">
+        <span>📲</span> Come installarla sulla Home:
+      </h3>
+      <ol class="space-y-2 text-slate-300 pl-4 list-decimal">
+        <li>Apri la pagina in <strong>Safari</strong>.</li>
+        <li>Tocca il tasto <strong>Condividi</strong> (l'icona del quadratino con la freccia in alto ⎋).</li>
+        <li>Scorri in basso e tocca <strong>"Aggiungi a schermata Home"</strong> (+).</li>
+        <li>Premi <strong>Aggiungi</strong> in alto a destra.</li>
+      </ol>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="pt-2 flex flex-col gap-2.5">
+      <a href="./index.html" class="w-full py-3.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 font-bold text-sm text-center shadow-lg shadow-blue-900/40 transition flex items-center justify-center gap-2">
+        <span>🍽️ Apri l'App Ora</span>
+      </a>
+      <a href="https://github.com/ponzianogabriele144-sketch/MensaApp" class="w-full py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-400 font-medium text-xs text-center transition">
+        Vedi su GitHub
+      </a>
+    </div>
+
+  </div>
+
+  <script>
+    // Generate QR code for the current app location
+    const appUrl = window.location.href.replace('install.html', 'index.html');
+    new QRCode(document.getElementById("qrcode"), {
+      text: appUrl,
+      width: 128,
+      height: 128,
+      colorDark : "#00192e",
+      colorLight : "#ffffff",
+      correctLevel : QRCode.CorrectLevel.H
+    });
+  </script>
+</body>
+</html>
